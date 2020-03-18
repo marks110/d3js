@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var files = document.querySelectorAll('.dragout');
+        for (var i = 0, file; file = files[i]; ++i) {
+            file.addEventListener('dragstart', function (e) {
+                e.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+            }, false);
+        }
+    </script>
+    <title>PDF Drag and Drop</title>
+</head>
+<body>
+    PDF DnD with Javascript
+    <p>
+        <a href="Speiseplan.pdf" class=".dragout" data-downloadurl="application/pdf:Chrome3DGlasses.pdf::http://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/en/us/intl/en/landing/chrome/cadie/glasses.pdf" &gt;.pdf file>
+            HTML Referenz als PDF
+        </a>
+    <p>
+        <embed width="600" height="600" src="Speiseplan.pdf">
+    <p>
+</body>
+</html>

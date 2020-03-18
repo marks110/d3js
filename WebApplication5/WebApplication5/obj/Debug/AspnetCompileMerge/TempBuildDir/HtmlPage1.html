@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+    Remove this if you use the .htaccess -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>drag-download-chrome-only</title>
+    <meta name="description" content="" />
+    <meta name="author" content="Nuthan" />
+
+</head>
+
+<body>
+    <div>
+        <header>
+            <h1>drag-download-chrome-only</h1>
+        </header>
+        <nav>
+            <p>
+                <a href="/">Home</a>
+            </p>
+            <p>
+                <a href="/contact">Contact</a>
+            </p>
+        </nav>
+
+        <div>
+
+        </div>
+        <div class="example">
+            Drag each of these files onto your desktop:
+            <a href="file:\\\\ds\DE\Labinst\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf">.pdf file</a>
+            <a href="file:\\ds\DE\Labinst\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf" class="dragout" data-downloadurl="application/pdf:\\ds\DE\Labinst\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf" draggable="true">.pdf file</a>
+            <a href="file:\\ds\DE\Labinst\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf" class="dragout" data-downloadurl="file:\\ds\DE\Labinst\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf" draggable="true">.pdf file</a>
+            <a href="file:\\ds\DE\Labinst\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf" class="dragout" data-downloadurl="application/pdf:\\ds\de\Analytical_Archive\LCMSData\bdouty\13185-22A_201119T0828_LCMS-4\data.pdf" draggable="true">.pdf file</a>
+
+            <a href="http://www.orimi.com/pdf-test.pdf" class="dragout" data-downloadurl="application/pdf:http://www.orimi.com/pdf-test.pdf draggable="true">.pdf file</a>
+        </div>
+        <script>
+
+            (function () {
+                var files = document.querySelectorAll('.dragout');
+                for (var i = 0, file; file = files[i]; ++i) {
+                    file.setAttribute('draggable', 'true'); // Don't really need, but good practice.
+                    file.addEventListener('dragstart', function (evt) {
+                        evt.dataTransfer.setData('text', this.getAttribute('data-downloadurl'));
+                    }, false);
+                }
+            })();
+
+        </script>
+        <footer>
+            <p>
+                &copy; Copyright  by Nuthan
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
+
