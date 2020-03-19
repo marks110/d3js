@@ -53,8 +53,8 @@ Public Class Processdata
 
 
 
-        rpt = "C:\data\test1.rpt"
-        txt = "C:\data\test1.txt"
+        rpt = "C:\data\test3.rpt"
+        txt = "C:\data\test3.txt"
         instrument_type = "waters"
 
         Model = WatersLCMSModelFactory.getModel(rpt, txt)
