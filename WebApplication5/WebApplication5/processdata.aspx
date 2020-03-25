@@ -3,7 +3,43 @@
 <%@ Register assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.DataVisualization.Charting" tagprefix="asp" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <style>
+    <style>       
+        .loading-spinner {
+            z-index: 2000 !important;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            background-color: rgba(0,0,0,0.3);
+            transition: visibility 0.15s linear, opacity 0.15s linear;
+            visibility: hidden;
+        }
+        .loading-spinner.show {
+           display: flex !important;
+           justify-content: center;
+            visibility: visible;
+            opacity:1;
+        }
+        .loading-spinner > .KR-spinner {
+            display: table !important;
+            margin: auto;
+        }
+
+        .diplayhide{
+           display:none;
+        }
+
+        .printWidth {
+            width:1141px;
+        }       
+
+        .icons {
+            font-size: 25px;            
+            margin-right: 15px;
+            margin-left: 15px;
+        }
+
         .btn:focus {
           outline: none;
         }
@@ -32,7 +68,7 @@
             border-width: 2px;
         }
     </style>
-    
+    <link rel="stylesheet" href="./fontawesome-5.8.1/css/all.min.css"/>
     <script src="https://d3js.org/d3.v3.min.js"></script>    
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -138,20 +174,20 @@
            <svg width="540" height="270" id="d3Chart3" style="display:none"></svg>       
         </div>
 
-        <div class="d-flex" style="margin-left:20px; display: none" id="divMass">                        
+        <div class="d-flex" style="margin-top:10px; margin-left:20px; display: none" id="divMass">                        
             <label class="input-group-text" id="lbMass" style="color: #337ab7;">Mass</label>            
             <input class="mx-5" type="text" id="tbMass" style="border-color: bisque;height: 31px; vertical-align: middle; text-align: center;  width: 90px;">
-            <button type="button" id="btOnOff" class="btn btn-info" style="font-size: 15px;font-weight: bold;">UV on/off</button>            
-            
-            <label class="input-group-text" id="lbCount" style="margin-left:50px; color: #ee0b0b;">0</label>            
-            <button type="button" id="btAdd" class="btn btn-info" style="width:60px; font-size: 15px;font-weight: bold;">Add</button>
-            <button type="button" id="btClear" class="btn btn-info" style="width:60px; font-size: 15px;font-weight: bold;">Clear</button>            
-            <button type="button" id="btPDF" class="btn btn-info" style="width:90px; font-size: 15px;font-weight: bold;">SavePDF</button>            
+            <button type="button" id="btOnOff" class="btn btn-info" style="font-size: 15px;font-weight: bold;">UV on/off</button>                        
+            <label class="input-group-text" id="lbCount" style="margin-left:30px; color: #ee0b0b;">0</label>            
+            <p id="btAdd" class="fa fa-plus icons" title="Add"></p>
+            <p id="btClear" class="fa fa-trash icons" title="Clear"></p>		    
+            <p id="btDragout" class="fa fa-hand-point-up icons" draggable="true" title="Drag out" style="z-index:1000"></p>
+            <p id="btPDF" class="fa fa-download icons" title="Download"></p>
         </div>                  
     </div>
 
-    <div class="mt-3" id="printPDF" style ="margin-top:50px;display:none">        
-        <div id="topTable" style ="margin-bottom:100px; font-size: 20px;display:none">
+    <div class="mt-3 diplayhide printWidth" id="printPDF" style ="margin-top:50px;">        
+        <div id="topTable" style ="margin-bottom:100px; font-size: 20px;">
            <div id="lbID" style="margin-right:60px; font-size: 40px; text-align: right;">23423</div>
            <table style="margin-left:60px; margin-right:60px; width: 90%; border-color: black; border-style: solid;">              
               <tr>
@@ -168,9 +204,14 @@
               </tr>              
             </table>
         </div>
-        <div id="temp" style="display:none">
-            <img id="imageAdd" src="" style="width:95%">
+        <div id="temp" class="diplayhide printWidth">
+            <img id="imageAdd" src="" style="width:100%">
         </div>
-        <div id="addGraph" style="margin-right:50px; margin-left:50px;"></div>
+        <div id="addGraph" style="margin-left:25px"></div>
+    </div>
+
+    <!-- loading spinner -->
+    <div class="loading-spinner fade" style="">
+        <div class="KR-spinner" style="font-size:20px"><i class="fas fa-sync fa-spin" style="font-size:30px"></i> Waiting ..</div>       
     </div>    
 </asp:Content>

@@ -1,5 +1,6 @@
 ﻿var gLeft = 70;
 var gRight = 10;
+var base64PDF = null;
 
 function DrawUV220(data, width, height, svg) {
 
@@ -445,6 +446,10 @@ function getSVGString(svgNode) {
         // Add Parent element Id and Classes to the list
         selectorTextArr.push('#' + parentElement.id);
 
+        for (var c = 0; c < parentElement.classList.length; c++)
+            if (!contains('.' + parentElement.classList[c], selectorTextArr))
+                selectorTextArr.push('.' + parentElement.classList[c]);
+
         // Add Children element Ids and Classes to the list
         var nodes = parentElement.getElementsByTagName("*");
         for (var i = 0; i < nodes.length; i++) {
@@ -452,6 +457,9 @@ function getSVGString(svgNode) {
             if (!contains('#' + id, selectorTextArr))
                 selectorTextArr.push('#' + id);
             var classes = nodes[i].classList;
+            for (var c = 0; c < classes.length; c++)
+                if (!contains('.' + classes[c], selectorTextArr))
+                    selectorTextArr.push('.' + classes[c]);
         }
 
         // Extract CSS Rules
@@ -486,6 +494,8 @@ function getSVGString(svgNode) {
         var styleElement = document.createElement("style");
         styleElement.setAttribute("type", "text/css");
         styleElement.innerHTML = cssText;
+        var refNode = element.hasChildNodes() ? element.children[0] : null;
+        element.insertBefore(styleElement, refNode);
     }
 }
 function svgString2Image(svgString, width, height, format, callback) {
@@ -878,6 +888,7 @@ $(document).ready(function () {
     d3Chart1Draw();
 
     $('#btAdd').on('click', function () {
+        $('.loading-spinner').addClass("show");
         var count = $('#lbCount').text();
         count = Number(count) + 1;
         if (count == 1) {
@@ -885,7 +896,7 @@ $(document).ready(function () {
             D3GraphToImage(svg);
             $("#addGraph").append($("#imageAdd").clone());
 
-            $objNew = $('<div id="pa" style="height:570px;"></div>');
+            $objNew = $('<div id="pa" style="height:580px;"></div>');
             $objNew.appendTo("#addGraph");
         }
 
@@ -909,9 +920,12 @@ $(document).ready(function () {
                     $("#addGraph").append($("#imageAdd").clone());
 
                     if (count % 2 == 0) {
-                        $objNext = $('<div id="pa" style="height: 96px;"></div>');
+                        $objNext = $('<div id="pa" style="height: 29px;"></div>');
                         $objNext.appendTo("#addGraph");
                     }
+
+                    makebase64PDF();
+                    $('.loading-spinner').removeClass("show");
                 }
             },
             failure: function (response) {
@@ -925,8 +939,11 @@ $(document).ready(function () {
     });
 
     $('#btClear').on('click', function () {
+        $('.loading-spinner').addClass("show");
         $('#lbCount').text("0");
         $("#addGraph").empty();
+        base64PDF = null;
+        $('.loading-spinner').removeClass("show");
     });
 
     var setTopTable = function () {
@@ -954,6 +971,7 @@ $(document).ready(function () {
 
     $('#btPDF').on('click', function () {
 
+        $('.loading-spinner').addClass("show");
         $('#firstGraph').hide();
         $('#secondGraph').hide();
         $('#divMass').hide();
@@ -966,19 +984,19 @@ $(document).ready(function () {
         document.title = '';
         document.pageX = '';
         document.pageY = '';
-        //window.print();
-        //debugger;        
 
         var options = {
             background: "rgb(255,255,255)",
             pagesplit: true,
-            //useOverflow: true
         };
 
-        var pdf = new jsPDF('p', 'pt', [600, 600]);
+        var pdf = new jsPDF('p', 'pt', [600, 630]);
         pdf.internal.scaleFactor = 2;
-        pdf.addHTML($("#printPDF"), 25, 25, options, function () {
+
+        pdf.addHTML($("#printPDF"), 15, 15, options, function () {
             pdf.save('output.pdf');
+            $('.loading-spinner').removeClass("show");
+            delete pdf;
         });
 
         $('#firstGraph').show();
@@ -991,6 +1009,64 @@ $(document).ready(function () {
         $("#printPDF").hide();
     });
 
+    var makebase64PDF = function () {
+        //return;
+        $('#firstGraph').hide();
+        $('#secondGraph').hide();
+        $('#divMass').hide();
+        $("#RecFillByMouseChart1").hide();
+        $('#RecFillByMouseChart2').hide();
+
+        setTopTable();
+        $('#topTable').show();
+        $("#printPDF").show();
+        document.title = '';
+        document.pageX = '';
+        document.pageY = '';
+
+        var options = {
+            background: "rgb(255,255,255)",
+            pagesplit: true,
+        };
+
+        var pdf = new jsPDF('p', 'pt', [600, 630], true);
+
+        pdf.internal.scaleFactor = 2;
+        pdf.addHTML($("#printPDF"), 15, 15, options, function () {
+            base64PDF = null;
+            base64PDF = pdf.output("datauristring");
+        });
+
+        $('#firstGraph').show();
+        $('#secondGraph').show();
+        $('#divMass').show();
+        $("#RecFillByMouseChart1").show();
+        $('#RecFillByMouseChart2').show();
+
+        $('#topTable').hide();
+        $("#printPDF").hide();
+    }   
+
+    var file = document.getElementById("btDragout");
+    file.addEventListener("dragstart", function (evt) {                                                
+        var pdfname = "dragout.pdf";
+        evt.dataTransfer.setData("DownloadURL", "application/pdf:" + pdfname + ":" + base64PDF);                
+    }, false);
+
+    file.addEventListener("dragend", function (evt) {          
+        $('.loading-spinner').addClass("show");
+        evt.preventDefault();                
+        evt.dataTransfer.clearData();                
+        setTimeout(function () {
+            if (base64PDF != null && evt.pageX >= 0 && evt.pageX <= window.outerWidth) {
+                var iframe = "<iframe width='100%' height='100%' src='" + base64PDF + "'></iframe>"
+                document.write(iframe);                
+            }
+            $('.loading-spinner').removeClass("show");
+        }, 1000);
+
+    }, false);  
+   
 });
 
-
+       
