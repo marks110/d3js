@@ -544,9 +544,6 @@ $(document).ready(function () {
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
-        $("#d3Chart1 svg").prepend($("#svg_style").clone()); 
-        $("#d3Chart2").prepend($("#svg_style").clone()); 
-
         $.ajax({
             type: "POST",
             url: "processdata.aspx/getChartModelData",
