@@ -286,7 +286,7 @@ function DrawMS(data, maxInt, minInt) {
         maxY = +maxY.toFixed(3);
         svg.append("text").attr("id", "graph2MaxLavel").attr("x", rX + 20).attr("y", rY).text("MAX:").style("font-size", "12px").style("fill", "red").attr("alignment-baseline", "middle")
         svg.append("text").attr("id", "graph2MaxValue").attr("x", rX + 55).attr("y", rY).text(maxY.toExponential(1)).style("font-size", "12px;").attr("alignment-baseline", "middle")
-       
+
     }
 
     function update(data) {
@@ -543,6 +543,9 @@ $(document).ready(function () {
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
+
+        $("#d3Chart1 svg").prepend($("#svg_style").clone());
+        $("#d3Chart2").prepend($("#svg_style").clone());
 
         $.ajax({
             type: "POST",
@@ -1042,28 +1045,28 @@ $(document).ready(function () {
 
         $('#topTable').hide();
         $("#printPDF").hide();
-    }   
+    }
 
     var file = document.getElementById("btDragout");
-    file.addEventListener("dragstart", function (evt) {                                                
+    file.addEventListener("dragstart", function (evt) {
         var pdfname = "dragout.pdf";
-        evt.dataTransfer.setData("DownloadURL", "application/pdf:" + pdfname + ":" + base64PDF);                
+        evt.dataTransfer.setData("DownloadURL", "application/pdf:" + pdfname + ":" + base64PDF);
     }, false);
 
-    file.addEventListener("dragend", function (evt) {          
+    file.addEventListener("dragend", function (evt) {
         $('.loading-spinner').addClass("show");
-        evt.preventDefault();                
-        evt.dataTransfer.clearData();                
+        evt.preventDefault();
+        evt.dataTransfer.clearData();
         setTimeout(function () {
             if (base64PDF != null && evt.pageX >= 0 && evt.pageX <= window.outerWidth) {
                 var iframe = "<iframe width='100%' height='100%' src='" + base64PDF + "'></iframe>"
-                document.write(iframe);                
+                document.write(iframe);
             }
             $('.loading-spinner').removeClass("show");
         }, 1000);
 
-    }, false);  
-   
+    }, false);
+
 });
 
-       
+

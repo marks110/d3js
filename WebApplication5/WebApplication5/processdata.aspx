@@ -68,7 +68,8 @@
             border-width: 2px;
         }
     </style>
-    <link rel="stylesheet" href="./fontawesome-5.8.1/css/all.min.css"/>
+<%--    <link rel="stylesheet" href="./fontawesome-5.8.1/css/all.min.css"/>--%>
+    <link href="Content/fontawesome-all.css" rel="stylesheet" />
     <script src="https://d3js.org/d3.v3.min.js"></script>    
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -186,7 +187,7 @@
         </div>                  
     </div>
 
-    <div class="mt-3 diplayhide printWidth" id="printPDF" style ="margin-top:50px;">        
+    <div class="mt-3 diplayhide printWidth" id="printPDF" style ="margin-top:50px;">          
         <div id="topTable" style ="margin-bottom:100px; font-size: 20px;">
            <div id="lbID" style="margin-right:60px; font-size: 40px; text-align: right;">23423</div>
            <table style="margin-left:60px; margin-right:60px; width: 90%; border-color: black; border-style: solid;">              
